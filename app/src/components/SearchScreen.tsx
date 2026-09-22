@@ -8,12 +8,12 @@ interface SearchScreenProps {
 export function SearchScreen({ onSubmit }: SearchScreenProps) {
   const [scenarioId, setScenarioId] = useState(scenarios[0].id);
   const scenario = scenarios.find((s) => s.id === scenarioId) ?? scenarios[0];
-  const [mode, setMode] = useState<TravelMode>(scenario.mode);
+  const [mode, setMode] = useState<TravelMode>(scenario.defaultMode);
 
   function handleScenarioChange(nextId: string) {
     const next = scenarios.find((s) => s.id === nextId) ?? scenarios[0];
     setScenarioId(nextId);
-    setMode(next.mode);
+    setMode(next.defaultMode);
   }
 
   return (

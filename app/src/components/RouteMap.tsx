@@ -2,12 +2,7 @@ import { useEffect } from "react";
 import { MapContainer, Marker, Polyline, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import type { LatLng, RouteSegment } from "../data/dummy-data";
-
-const concernLineColor: Record<RouteSegment["concern"], string> = {
-  low: "#10b981", // emerald-500
-  moderate: "#f59e0b", // amber-500
-  high: "#f97316", // orange-500
-};
+import { concernPalette } from "../lib/concern";
 
 function makeMarkerIcon(label: string, backgroundClass: string) {
   return L.divIcon({
@@ -38,9 +33,12 @@ function FitBounds({ points }: FitBoundsProps) {
 
 interface RouteMapProps {
   segments: RouteSegment[];
+  /** When set, brightens/thickens this segment's polyline and dims the others — mirrors the
+   * highlight shown on the segmented bar when a "Why this route?" factor is hovered/tapped. */
+  highlightedIndex?: number | null;
 }
 
-export function RouteMap({ segments }: RouteMapProps) {
+export function RouteMap({ segments, highlightedIndex = null }: RouteMapProps) {
   const allPoints = segments.flatMap((segment) => segment.path);
   const origin = allPoints[0];
   const destination = allPoints[allPoints.length - 1];
@@ -60,13 +58,22 @@ export function RouteMap({ segments }: RouteMapProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <FitBounds points={allPoints} />
-        {segments.map((segment, index) => (
-          <Polyline
-            key={index}
-            positions={segment.path}
-            pathOptions={{ color: concernLineColor[segment.concern], weight: 5, opacity: 0.85, lineCap: "round" }}
-          />
-        ))}
+        {segments.map((segment, index) => {
+          const isDimmed = highlightedIndex !== null && highlightedIndex !== index;
+          const isHighlighted = highlightedIndex === index;
+          return (
+            <Polyline
+              key={index}
+              positions={segment.path}
+              pathOptions={{
+                color: concernPalette[segment.concern].hex,
+                weight: isHighlighted ? 8 : 5,
+                opacity: isDimmed ? 0.3 : 0.85,
+                lineCap: "round",
+              }}
+            />
+          );
+        })}
         <Marker position={origin} icon={originIcon} />
         <Marker position={destination} icon={destinationIcon} />
       </MapContainer>

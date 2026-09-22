@@ -9,7 +9,7 @@ type Screen = "search" | "report" | "saved";
 function App() {
   const [screen, setScreen] = useState<Screen>("search");
   const [scenario, setScenario] = useState<RouteScenario | null>(null);
-  const [, setMode] = useState<TravelMode>("walking");
+  const [mode, setMode] = useState<TravelMode>("walking");
 
   function handleSearchSubmit(nextScenario: RouteScenario, nextMode: TravelMode) {
     setScenario(nextScenario);
@@ -27,7 +27,12 @@ function App() {
       {screen === "search" && <SearchScreen onSubmit={handleSearchSubmit} />}
 
       {screen === "report" && scenario && (
-        <RouteReport scenario={scenario} onBack={handleNewSearch} onSave={() => setScreen("saved")} />
+        <RouteReport
+          scenario={scenario}
+          mode={mode}
+          onBack={handleNewSearch}
+          onSave={() => setScreen("saved")}
+        />
       )}
 
       {screen === "saved" && scenario && (
