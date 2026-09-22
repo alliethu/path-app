@@ -15,6 +15,12 @@ application.
 - The "search" screen doesn't do real geocoding — picking a scenario from the
   dropdown just swaps in the corresponding canned data so the rest of the
   flow can be demoed without typing.
+- The route map uses [Leaflet](https://leafletjs.com/) with free
+  [OpenStreetMap](https://www.openstreetmap.org/copyright) tiles — no API
+  key or paid mapping provider required, so it deploys to GitHub Pages with
+  zero config or secrets. Each scenario's route/alternative segments carry
+  hand-picked, plausible lat/lng waypoints (not geocoded) so the map polyline
+  can be color-coded by concern level to match the segment bar.
 
 ## What this is NOT
 
@@ -30,7 +36,9 @@ application.
 
 1. **Search** — From/To/date-time/mode, prefilled from a selected demo
    scenario, with a "Check my route" button.
-2. **Route report** — distance/time summary, a segmented concern bar
+2. **Route report** — distance/time summary, a route map (Leaflet +
+   OpenStreetMap) with the path color-coded by concern level and
+   origin/destination markers, a segmented concern bar
    (green/amber/orange), and a "Why this route?" factor list.
 3. **Alternative route** — a comparison view (time delta + tradeoffs vs. the
    original), toggleable back to the original route.

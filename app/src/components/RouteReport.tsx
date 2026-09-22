@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { RouteScenario } from "../data/dummy-data";
 import { SegmentBar } from "./SegmentBar";
+import { RouteMap } from "./RouteMap";
 
 interface RouteReportProps {
   scenario: RouteScenario;
@@ -52,6 +53,12 @@ export function RouteReport({ scenario, onBack, onSave }: RouteReportProps) {
             <p className="text-xs text-slate-500">Time</p>
             <p className="text-sm font-semibold text-slate-800">{active.duration}</p>
           </div>
+        </div>
+
+        {/* Map */}
+        <div className="mt-6">
+          <p className="mb-2 text-sm font-medium text-slate-700">Route map</p>
+          <RouteMap segments={active.segments} />
         </div>
 
         {/* Segmented route bar */}
